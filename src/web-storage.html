@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>learn webStorage</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <button onclick="revome('sitname')">移除sitename</button>
+    <script>
+        // localStorage和sessionStorage的区别是local永久存在除非手动删除，session浏览器关闭后删除
+        window.localStorage.sitname = 'localhost:80'
+        document.getElementById('root').innerHTML = '网站名称：' + localStorage.sitname
+
+        function revome (key) {
+            console.log('key', key)
+            window.localStorage.removeItem(key)
+            console.log('sitename', localStorage.sitname)
+            document.getElementById('root').innerHTML = '网站名称：' + localStorage.sitname
+        }
+    </script>
+</body>
+
+</html>

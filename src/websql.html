@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>learn websql</title>
+</head>
+<body>
+    <div id="root"></div>
+    <button onclick="select()">select</button>
+    <script>
+        // openDatabase，打开数据库，如果数据库不存在创建数据里
+        // transaction，事务
+        // executeSql，执行sql语句
+        // 所有的语法和普通的sql语法相同
+        // 五个参数分别是name,version,description,size,callback function
+        var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024, function () {
+            console.log('创建数据库成功')
+        })
+        db.transaction(function (tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
+            tx.executeSql('INSERT INTO LOGS (id, log) VALUES (1, "插入了第一条数据")');
+            tx.executeSql('INSERT INTO LOGS (id, log) VALUES (2, "插入了第二条数据")');
+        })
+
+        function select () {
+            db.transaction(function (tx) {
+                tx.executeSql('SELECT * FROM LOGS', [], function (tx ,results) {
+                    var len = results.rows.length;
+                    var message = '<p>数据库记录行数为：' + len + '</p>'
+                    document.querySelector('#root').innerHTML += message;
+
+                    for (var index = 0; index < results.rows.length; index++) {
+                        var log = '<p>' + results.rows[index].id + ' ' + results.rows[index].log + '</p>';
+                        document.querySelector('#root').innerHTML += log
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+</html>
